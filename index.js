@@ -1,9 +1,9 @@
 // Import required modules
-const { MongoClient, ServerApiVersion } = require("mongodb"); // MongoDB driver
-const express = require("express"); // Express framework
-const dotenv = require("dotenv"); // Environment variables handler
-const bcrypt = require("bcrypt"); // Password hashing library
-const cors = require("cors"); // CORS middleware
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const express = require("express");
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
+const cors = require("cors");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -13,7 +13,9 @@ const app = express();
 
 // Middleware to enable CORS
 app.use(cors());
-app.use(express.json()); // Middleware to parse JSON requests
+
+// Middleware to parse JSON requests
+app.use(express.json());
 
 // MongoDB DataBase URI
 const uri = process.env.DB_URI;
@@ -21,9 +23,9 @@ const uri = process.env.DB_URI;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
-    version: ServerApiVersion.v1, // MongoDB Server API version
-    strict: true, // Strict mode for API versioning
-    deprecationErrors: true, // Show deprecation errors
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
   },
 });
 
