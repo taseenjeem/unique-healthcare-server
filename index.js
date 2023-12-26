@@ -44,14 +44,10 @@ async function run() {
 
     // Endpoint to add new customer info
     app.post("/add-new-customer-info", async (req, res) => {
-      const { name, email, country, phone, password } = req.body;
+      const { name, email, country, phone, password, account_creation_time } =
+        req.body;
 
       try {
-        // Input validation
-        if (!name || !email || !country || !phone || !password) {
-          return res.status(400).json({ message: "All fields are required." });
-        }
-
         // Check if the user already exists
         const isOldUser = await usersDatabase.findOne({ user_email: email });
 
@@ -67,6 +63,7 @@ async function run() {
             country: country,
             phone_number: phone,
             registration_type: "Manually",
+            account_creation_time: account_creation_time,
           });
 
           res
