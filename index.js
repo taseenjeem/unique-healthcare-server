@@ -42,7 +42,7 @@ async function run() {
       .db("pathology-database")
       .collection("user-credentials");
 
-    // Endpoint to add new customer info
+    // Add new customer info with manually
     app.post("/add-new-customer-info", async (req, res) => {
       const { name, email, country, phone, password, account_creation_time } =
         req.body;
@@ -63,6 +63,40 @@ async function run() {
             country: country,
             phone_number: phone,
             registration_type: "Manually",
+            account_creation_time: account_creation_time,
+          });
+
+          res
+            .status(201)
+            .json({ message: "User created successfully.", user: newUser });
+        } else {
+          // If user already exists, return a conflict status
+          return res.status(409).json({ message: "User already exists." });
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: "Something went wrong." });
+      }
+    });
+
+    // Add new customer info with pop-up
+    app.post("/add-new-customer-info-with-pop-up", async (req, res) => {
+      const { name, email, country, phone, password, account_creation_time } =
+        req.body;
+
+      try {
+        // Check if the user already exists
+        const isOldUser = await usersDatabase.findOne({ user_email: email });
+
+        if (!isOldUser) {
+          // Create a new user entry
+          const newUser = await usersDatabase.insertOne({
+            full_name: name,
+            user_email: email,
+            password: password,
+            country: country,
+            phone_number: phone,
+            registration_type: "Google",
             account_creation_time: account_creation_time,
           });
 
