@@ -42,6 +42,11 @@ async function run() {
       .db("pathology-database")
       .collection("user-credentials");
 
+    // Database of doctors
+    const doctorsDatabase = client
+      .db("pathology-database")
+      .collection("doctors");
+
     // Add new customer info with manually
     app.post("/add-new-customer-info", async (req, res) => {
       const { name, email, country, phone, password, account_creation_time } =
@@ -111,6 +116,11 @@ async function run() {
         console.error("Error:", error);
         res.status(500).json({ message: "Something went wrong." });
       }
+    });
+
+    app.get("/all-doctors-info", async (req, res) => {
+      const result = await doctorsDatabase.find({}).toArray();
+      res.send(result);
     });
   } catch (error) {
     console.error("Database connection error:", error);
