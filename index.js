@@ -118,8 +118,15 @@ async function run() {
       }
     });
 
+    // Getting all doctors info
     app.get("/all-doctors-info", async (req, res) => {
       const result = await doctorsDatabase.find({}).toArray();
+      res.send(result);
+    });
+
+    // Getting all doctors info by query
+    app.get("/all-doctors-info-by-query", async (req, res) => {
+      const result = await doctorsDatabase.find(req.query).toArray();
       res.send(result);
     });
   } catch (error) {
