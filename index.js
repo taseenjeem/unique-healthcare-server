@@ -149,13 +149,13 @@ async function run() {
           const newAppointment = await appointmentDatabase.insertOne(data);
 
           res.status(201).json({
-            message: "Arrived a new appointment",
+            message: "Appointment booked successfully!",
             appointment_details: newAppointment,
           });
         } else {
           return res
             .status(409)
-            .json({ message: "This appointment still in progress" });
+            .json({ message: "You still have an appointment in progress!" });
         }
       } catch (error) {
         console.error("Error:", error);
