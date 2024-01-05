@@ -47,6 +47,11 @@ async function run() {
       .db("pathology-database")
       .collection("doctors");
 
+    // Database of appointments
+    const appointmentDatabase = client
+      .db("pathology-database")
+      .collection("appointments");
+
     // Add new customer info with manually
     app.post("/add-new-customer-info", async (req, res) => {
       const { name, email, country, phone, password, account_creation_time } =
@@ -128,6 +133,34 @@ async function run() {
     app.get("/all-doctors-info-by-query", async (req, res) => {
       const result = await doctorsDatabase.find(req.query).toArray();
       res.send(result);
+    });
+
+    // Add new appointments
+    app.post("/add-new-appointment", async (req, res) => {
+      const data = req.body;
+
+      try {
+        const incompleteAppointment = await appointmentDatabase.findOne({
+          patient_email: data.patient_email,
+          appointment_status: "pending",
+        });
+
+        if (!incompleteAppointment) {
+          const newAppointment = await appointmentDatabase.insertOne(data);
+
+          res.status(201).json({
+            message: "Arrived a new appointment",
+            appointment_details: newAppointment,
+          });
+        } else {
+          return res
+            .status(409)
+            .json({ message: "This appointment still in progress" });
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: "Something went wrong." });
+      }
     });
   } catch (error) {
     console.error("Database connection error:", error);
