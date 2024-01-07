@@ -52,6 +52,11 @@ async function run() {
       .db("pathology-database")
       .collection("appointments");
 
+    // Database of testimonials
+    const testimonialDatabase = client
+      .db("pathology-database")
+      .collection("testimonials");
+
     // Add new customer info with manually
     app.post("/add-new-customer-info", async (req, res) => {
       const { name, email, country, phone, password, account_creation_time } =
@@ -161,6 +166,12 @@ async function run() {
         console.error("Error:", error);
         res.status(500).json({ message: "Something went wrong." });
       }
+    });
+
+    // Getting all testimonials
+    app.get("/all-testimonials", async (req, res) => {
+      const result = await testimonialDatabase.find({}).toArray();
+      res.send(result);
     });
   } catch (error) {
     console.error("Database connection error:", error);
