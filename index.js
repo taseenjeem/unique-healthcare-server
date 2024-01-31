@@ -31,13 +31,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // // Connect to MongoDB
-    // client.connect();
-
-    // // Send a ping to confirm a successful connection
-    //  client.db("admin").command({ ping: 1 });
-    console.log("Successfully connected to MongoDB!");
-
     // Database of users
     const usersDatabase = client
       .db("pathology-database")
