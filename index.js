@@ -162,6 +162,12 @@ async function run() {
       }
     });
 
+    // Getting appointments info by query
+    app.get("/appointments-by-query", async (req, res) => {
+      const result = await appointmentDatabase.find(req.query).toArray();
+      res.send(result);
+    });
+
     // Getting all testimonials
     app.get("/all-testimonials", async (req, res) => {
       const result = await testimonialDatabase.find({}).toArray();
